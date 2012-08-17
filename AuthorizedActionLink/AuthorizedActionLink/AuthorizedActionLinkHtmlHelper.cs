@@ -48,7 +48,7 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+            if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
             {
                 return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName);
             }
@@ -118,7 +118,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)rvType.GetProperty("area").GetValue(routeValues, null), controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -129,7 +129,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -151,7 +151,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)routeValues["area"], controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -162,7 +162,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -185,7 +185,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)rvType.GetProperty("area").GetValue(routeValues, null), controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -196,7 +196,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -218,7 +218,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)routeValues["area"], controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -229,7 +229,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -278,7 +278,7 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+            if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
             {
                 return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName);
             }
@@ -348,7 +348,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)rvType.GetProperty("area").GetValue(routeValues, null), controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -359,7 +359,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -381,7 +381,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)routeValues["area"], controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -392,7 +392,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
                 }
@@ -415,7 +415,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)rvType.GetProperty("area").GetValue(routeValues, null), controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -426,7 +426,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -448,7 +448,7 @@ namespace AuthorizedActionLink
 
             if (hasArea)
             {
-                if (ActionIsAccessibleToUser(htmlHelper, (string)routeValues["area"], controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -459,7 +459,7 @@ namespace AuthorizedActionLink
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, controllerName, actionName))
+                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
                 {
                     return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
                 }
@@ -479,18 +479,18 @@ namespace AuthorizedActionLink
         /// <returns>True/false if action is accessible to current user.</returns>
         public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName)
         {
-            return AuthorizedActionLinkHtmlHelper.ActionIsAccessibleToUser(htmlHelper, String.Empty, actionName);
+            return AuthorizedActionLinkHtmlHelper.ActionIsAccessibleToUser(htmlHelper, actionName, String.Empty);
         }
 
         /// <summary>
         /// Determines if specified action is accessible to current user.
         /// </summary>
         /// <param name="htmlHelper">HtmlHelper object.</param>
-        /// <param name="areaName">Area name to test.</param>
-        /// <param name="controllerName">Controller name to test.</param>
         /// <param name="actionName">Action name to test.</param>
+        /// <param name="controllerName">Controller name to test.</param>
+        /// <param name="areaName">Area name to test.</param>
         /// <returns>True/false if action is accessible to current user.</returns>
-        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string areaName, string controllerName, string actionName)
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName)
         {
             // Determine controller type.
             var controllerResolver = new MvcSiteMapProvider.DefaultControllerTypeResolver();
@@ -503,17 +503,17 @@ namespace AuthorizedActionLink
             // Get controller base.
             var controllerBase = (ControllerBase)Activator.CreateInstance(controllerType);
 
-            return AuthorizedActionLinkHtmlHelper.ActionIsAccessibleToUser(htmlHelper, controllerBase, actionName);
+            return ActionIsAccessibleToUser(htmlHelper, actionName, controllerBase);
         }
 
         /// <summary>
         /// Determines if specified action is accessible to current user.
         /// </summary>
         /// <param name="htmlHelper">HtmlHelper object.</param>
-        /// <param name="controllerName">Controller name to test.</param>
         /// <param name="actionName">Action name to test.</param>
+        /// <param name="controllerName">Controller name to test.</param>
         /// <returns>True/false if action is accessible to current user.</returns>
-        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string controllerName, string actionName)
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName)
         {
             // Fetch controller.
             ControllerBase controllerBase;
@@ -543,17 +543,17 @@ namespace AuthorizedActionLink
             }
 
             // Check on authorization.
-            return AuthorizedActionLinkHtmlHelper.ActionIsAccessibleToUser(htmlHelper, controllerBase, actionName);
+            return ActionIsAccessibleToUser(htmlHelper, actionName, controllerBase);
         }
 
         /// <summary>
         /// Determines if specified action is accessible to current user.
         /// </summary>
         /// <param name="htmlHelper">HtmlHelper object.</param>
-        /// <param name="controllerBase">Controller to test.</param>
         /// <param name="actionName">Action name to test.</param>
+        /// <param name="controllerBase">Controller to test.</param>
         /// <returns>True/false if action is accessible to current user.</returns>
-        private static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, ControllerBase controllerBase, string actionName)
+        private static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, ControllerBase controllerBase)
         {
             // Get controller context.
             var controllerContext = new ControllerContext(htmlHelper.ViewContext.RequestContext, controllerBase);
@@ -565,16 +565,16 @@ namespace AuthorizedActionLink
             var actionDescriptor = controllerDescriptor.FindAction(controllerContext, actionName);
 
             // Check on authorization.
-            return ActionIsAuthorized(controllerContext, actionDescriptor);
+            return ActionIsAuthorized(actionDescriptor, controllerContext);
         }
 
         /// <summary>
         /// Tests if authorization works for action.
         /// </summary>
-        /// <param name="controllerContext">Controller context (including user) to test.</param>
         /// <param name="actionDescriptor">Action to test.</param>
+        /// <param name="controllerContext">Controller context (including user) to test.</param>
         /// <returns>True/false if action is authorized.</returns>
-        private static bool ActionIsAuthorized(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+        private static bool ActionIsAuthorized(ActionDescriptor actionDescriptor, ControllerContext controllerContext)
         {
             if (actionDescriptor == null)
             {
