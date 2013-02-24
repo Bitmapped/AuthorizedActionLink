@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>HtmlHelper for creating ActionLinks if current user is authorized to view destination page.  Uses MvcSiteMapProvier to help determine access permissions.</description>
     <releaseNotes>Initial release.</releaseNotes>
-    <copyright>Copyright 2013, Brian M. Powell</copyright>
+    <copyright>Copyright 2013, $author$</copyright>
     <tags>Authorize ActionLink</tags>
   </metadata>
 </package>
