@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://authorizedactionlink.codeplex.com/license</licenseUrl>
+    <projectUrl>http://authorizedactionlink.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>HtmlHelper for creating ActionLinks if current user is authorized to view destination page.  Uses MvcSiteMapProvier to help determine access permissions.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2013, Brian M. Powell</copyright>
+    <tags>Authorize ActionLink</tags>
+  </metadata>
+</package>
