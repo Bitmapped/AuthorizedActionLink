@@ -492,8 +492,9 @@ namespace AuthorizedActionLink
         /// <returns>True/false if action is accessible to current user.</returns>
         public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName)
         {
+            /*
             // Determine controller type.
-            var controllerResolver = new MvcSiteMapProvider.DefaultControllerTypeResolver();
+            var controllerResolver = new MvcSiteMapProvider.Web.Mvc.MvcResolver();
             var controllerType = controllerResolver.ResolveControllerType(areaName, controllerName);
             if (controllerType == null)
             {
@@ -502,6 +503,25 @@ namespace AuthorizedActionLink
 
             // Get controller base.
             var controllerBase = (ControllerBase)Activator.CreateInstance(controllerType);
+            */
+
+            //var context = new HttpContextWrapper(System.Web.HttpContext.Current);
+            var testRequestContext = new RequestContext(htmlHelper.ViewContext.RequestContext.HttpContext, new RouteData());
+            //htmlHelper.ViewContext.RequestContext.HttpContext
+            testRequestContext.RouteData.DataTokens["Area"] = areaName;
+            //testRequestContext.RouteData.DataTokens["Namespaces"] = 
+            var controller = ControllerBuilder.Current.GetControllerFactory().CreateController(testRequestContext, controllerName);
+            
+            // Ensure controller exists.
+            if (controller == null)
+            {
+                throw new ArgumentException("Specified area or controller do not exist.");
+            }
+
+            // Get ControllerBase for this controller.
+            var controllerBase = (ControllerBase)Activator.CreateInstance(controller.GetType());
+
+
 
             return ActionIsAccessibleToUser(htmlHelper, actionName, controllerBase);
         }
