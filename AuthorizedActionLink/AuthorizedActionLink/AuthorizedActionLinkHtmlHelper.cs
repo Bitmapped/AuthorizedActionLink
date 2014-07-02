@@ -493,9 +493,9 @@ namespace AuthorizedActionLink
         public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName)
         {
             // Ensure area name is specified.
-            if (String.IsNullOrWhiteSpace(areaName))
+            if (areaName == null)
             {
-                throw new ArgumentException("Argument areaName must be specified.");
+                throw new ArgumentException("Argument areaName cannot be null. If root area is desired, specify parameter as an empty string.");
             }
 
             // Ensure controller name is specified.
