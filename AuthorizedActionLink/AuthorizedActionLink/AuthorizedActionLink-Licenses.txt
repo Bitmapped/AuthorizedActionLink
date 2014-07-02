@@ -1,0 +1,3 @@
+﻿This code also includes aspects of jfar's code at http://stackoverflow.com/questions/2721869/security-aware-action-link.
+
+This code also includes a section based on Yarx's code at http://stackoverflow.com/questions/14611652/asp-net-mvc-find-controller-by-name-with-area.
