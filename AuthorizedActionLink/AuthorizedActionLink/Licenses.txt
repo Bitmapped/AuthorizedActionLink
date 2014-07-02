@@ -1,4 +1,0 @@
-﻿This package includes the NuGet version of MvcSiteMapProvider from http://nuget.org/packages/MvcSiteMapProvider.
-MvcSiteMapProvider is licensed under the Microsoft Public License as per https://github.com/maartenba/MvcSiteMapProvider/blob/master/LICENSE.md.
-
-This code also includes aspects of jfar's code at http://stackoverflow.com/questions/2721869/security-aware-action-link.

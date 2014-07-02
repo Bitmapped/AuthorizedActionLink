@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MvcSiteMapProvider">
-      <HintPath>..\packages\MvcSiteMapProvider.3.2.3.0\lib\net40\MvcSiteMapProvider.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -55,10 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AuthorizedActionLink.nuspec" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Licenses.txt" />
+    <Content Include="AuthorizedActionLink-Licenses.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

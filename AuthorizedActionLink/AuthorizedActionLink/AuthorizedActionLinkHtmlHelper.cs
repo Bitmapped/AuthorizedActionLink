@@ -492,36 +492,43 @@ namespace AuthorizedActionLink
         /// <returns>True/false if action is accessible to current user.</returns>
         public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName)
         {
-            /*
-            // Determine controller type.
-            var controllerResolver = new MvcSiteMapProvider.Web.Mvc.MvcResolver();
-            var controllerType = controllerResolver.ResolveControllerType(areaName, controllerName);
-            if (controllerType == null)
+            // Ensure area name is specified.
+            if (String.IsNullOrWhiteSpace(areaName))
             {
-                throw new ArgumentException("Specified area or controller do not exist.");
+                throw new ArgumentException("Argument areaName must be specified.");
             }
 
-            // Get controller base.
-            var controllerBase = (ControllerBase)Activator.CreateInstance(controllerType);
-            */
+            // Ensure controller name is specified.
+            if (string.IsNullOrWhiteSpace(controllerName))
+            {
+                throw new ArgumentException("Argument controllerName must be specified.");
+            }
 
-            //var context = new HttpContextWrapper(System.Web.HttpContext.Current);
+            // Get request context to use in searching for controller.
             var testRequestContext = new RequestContext(htmlHelper.ViewContext.RequestContext.HttpContext, new RouteData());
-            //htmlHelper.ViewContext.RequestContext.HttpContext
             testRequestContext.RouteData.DataTokens["Area"] = areaName;
-            //testRequestContext.RouteData.DataTokens["Namespaces"] = 
-            var controller = ControllerBuilder.Current.GetControllerFactory().CreateController(testRequestContext, controllerName);
+            testRequestContext.RouteData.DataTokens["Controller"] = controllerName;
+            
+            // Try to get controller.
+            IController controller;
+            try
+            {
+                controller = ControllerBuilder.Current.GetControllerFactory().CreateController(testRequestContext, controllerName);
+            }
+            catch (HttpException)
+            {
+                // Could not create controller. Rethrow as ArgumentException.
+                throw new ArgumentException("Specified controller " + controllerName + " in area " + areaName + " does not exist.");
+            }
             
             // Ensure controller exists.
             if (controller == null)
             {
-                throw new ArgumentException("Specified area or controller do not exist.");
+                throw new ArgumentException("Specified controller " + controllerName + " in area " + areaName + " does not exist.");
             }
 
             // Get ControllerBase for this controller.
-            var controllerBase = (ControllerBase)Activator.CreateInstance(controller.GetType());
-
-
+            var controllerBase = (ControllerBase)controller;
 
             return ActionIsAccessibleToUser(htmlHelper, actionName, controllerBase);
         }
@@ -549,14 +556,24 @@ namespace AuthorizedActionLink
                 // Get controller factor.
                 IControllerFactory controllerFactory = ControllerBuilder.Current.GetControllerFactory();
 
-                // Get controller.
-                IController controller = controllerFactory.CreateController(htmlHelper.ViewContext.RequestContext, controllerName);
+                // Attempt to get controller.
+                IController controller = null;
+                try
+                {
+                    // Get controller.
+                    controller = controllerFactory.CreateController(htmlHelper.ViewContext.RequestContext, controllerName);
+                }
+                catch (HttpException)
+                {
+                    // Could not create controller. Rethrow as ArgumentException.
+                    throw new ArgumentException("Specified controller " + controllerName + " does not exist.");
+                }
 
                 // Ensure controller exists.
                 if (controller == null)
                 {
                     // Controller doesn't exist.
-                    throw new ArgumentException("Specified controller does not exist.");
+                    throw new ArgumentException("Specified controller " + controllerName + " does not exist.");
                 }
 
                 controllerBase = (ControllerBase)controller;
