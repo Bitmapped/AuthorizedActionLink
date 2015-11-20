@@ -489,8 +489,9 @@ namespace AuthorizedActionLink
         /// <param name="actionName">Action name to test.</param>
         /// <param name="controllerName">Controller name to test.</param>
         /// <param name="areaName">Area name to test.</param>
+        /// <param name="routeValues">Route data to test.</param>
         /// <returns>True/false if action is accessible to current user.</returns>
-        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName)
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName, object routeValues = null)
         {
             // Ensure area name is specified.
             if (areaName == null)
@@ -508,7 +509,21 @@ namespace AuthorizedActionLink
             var testRequestContext = new RequestContext(htmlHelper.ViewContext.RequestContext.HttpContext, new RouteData());
             testRequestContext.RouteData.DataTokens["Area"] = areaName;
             testRequestContext.RouteData.DataTokens["Controller"] = controllerName;
+
+            // Configure namespace for route data if applicable.
+            if (routeValues != null)
+            {
+                // Determine if area has been set.
+                Type rvType = routeValues.GetType();
+                bool hasNamespaces = (rvType.GetProperty("namespaces") == null) ? false : true;
+
+                if (hasNamespaces)
+                {
+                    testRequestContext.RouteData.DataTokens["Namespaces"] = (string[])rvType.GetProperty("area").GetValue(routeValues, null);
+                }
+            }
             
+
             // Try to get controller.
             IController controller;
             try
@@ -520,7 +535,7 @@ namespace AuthorizedActionLink
                 // Could not create controller. Rethrow as ArgumentException.
                 throw new ArgumentException("Specified controller " + controllerName + " in area " + areaName + " does not exist.");
             }
-            
+
             // Ensure controller exists.
             if (controller == null)
             {
