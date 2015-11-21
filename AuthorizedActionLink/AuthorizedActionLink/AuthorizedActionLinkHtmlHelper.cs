@@ -16,14 +16,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName);
-            }
-            else
-            {
-                return MvcHtmlString.Create(linkText);
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: null,
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -32,14 +35,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, object routeValues)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues);
-            }
-            else
-            {
-                return MvcHtmlString.Create(linkText);
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -48,14 +54,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName);
-            }
-            else
-            {
-                return MvcHtmlString.Create(linkText);
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: null,
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -64,14 +73,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, RouteValueDictionary routeValues)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues);
-            }
-            else
-            {
-                return MvcHtmlString.Create(linkText);
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: routeValues,
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -80,14 +92,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, object routeValues, object htmlAttributes)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues, htmlAttributes);
-            }
-            else
-            {
-                return MvcHtmlString.Create(linkText);
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes)
+                );
         }
 
         /// <summary>
@@ -96,14 +111,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues, htmlAttributes);
-            }
-            else
-            {
-                return MvcHtmlString.Create(linkText);
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: routeValues,
+                htmlAttributes: htmlAttributes
+                );
         }
 
         /// <summary>
@@ -112,32 +130,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, object routeValues, object htmlAttributes)
         {
-            // Determine if area has been set.
-            Type rvType = routeValues.GetType();
-            bool hasArea = (rvType.GetProperty("area") == null) ? false : true;
-
-            if (hasArea)
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
-            }
-            else
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes)
+                );
         }
 
         /// <summary>
@@ -146,31 +149,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
         {
-            // Determine if area has been set.
-            bool hasArea = (routeValues.ContainsKey("area")) ? true : false;
-
-            if (hasArea)
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
-            }
-            else
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: routeValues,
+                htmlAttributes: htmlAttributes
+                );
         }
 
         /// <summary>
@@ -179,32 +168,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, object routeValues, object htmlAttributes)
         {
-            // Determine if area has been set.
-            Type rvType = routeValues.GetType();
-            bool hasArea = (rvType.GetProperty("area") == null) ? false : true;
-
-            if (hasArea)
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
-            }
-            else
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
-            }
+            return AuthorizedActionLinkOrText(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: protocol,
+                hostName: hostName,
+                fragment: fragment,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes)
+                );
         }
 
         /// <summary>
@@ -213,30 +187,16 @@ namespace AuthorizedActionLink
         /// <returns>Link or specified text.</returns>
         public static MvcHtmlString AuthorizedActionLinkOrText(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
         {
-            // Determine if area has been set.
-            bool hasArea = (routeValues.ContainsKey("area")) ? true : false;
-
-            if (hasArea)
+            // See if user has access to the action.
+            if (ActionIsAccessibleToUser(htmlHelper: htmlHelper, actionName: actionName, controllerName: controllerName, routeValues: routeValues))
             {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
+                // User has access. Generate ActionLink.
+                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Create(linkText);
-                }
+                // User does not have access. Return link text.
+                return MvcHtmlString.Create(linkText);
             }
         }
 
@@ -246,14 +206,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName);
-            }
-            else
-            {
-                return MvcHtmlString.Empty;
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: null,
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -262,14 +225,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, object routeValues)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues);
-            }
-            else
-            {
-                return MvcHtmlString.Empty;
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -278,14 +244,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName);
-            }
-            else
-            {
-                return MvcHtmlString.Empty;
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: null,
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -294,14 +263,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, RouteValueDictionary routeValues)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues);
-            }
-            else
-            {
-                return MvcHtmlString.Empty;
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: routeValues,
+                htmlAttributes: null
+                );
         }
 
         /// <summary>
@@ -310,14 +282,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, object routeValues, object htmlAttributes)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues, htmlAttributes);
-            }
-            else
-            {
-                return MvcHtmlString.Empty;
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes)
+                );
         }
 
         /// <summary>
@@ -326,14 +301,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
         {
-            if (ActionIsAccessibleToUser(htmlHelper, actionName))
-            {
-                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, routeValues, htmlAttributes);
-            }
-            else
-            {
-                return MvcHtmlString.Empty;
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: null,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: routeValues,
+                htmlAttributes: htmlAttributes
+                );
         }
 
         /// <summary>
@@ -342,32 +320,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, object routeValues, object htmlAttributes)
         {
-            // Determine if area has been set.
-            Type rvType = routeValues.GetType();
-            bool hasArea = (rvType.GetProperty("area") == null) ? false : true;
-
-            if (hasArea)
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
-            }
-            else
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes)
+                );
         }
 
         /// <summary>
@@ -376,31 +339,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
         {
-            // Determine if area has been set.
-            bool hasArea = (routeValues.ContainsKey("area")) ? true : false;
-
-            if (hasArea)
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
-            }
-            else
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: null,
+                hostName: null,
+                fragment: null,
+                routeValues: routeValues,
+                htmlAttributes: htmlAttributes
+                );
         }
 
         /// <summary>
@@ -409,32 +358,17 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, object routeValues, object htmlAttributes)
         {
-            // Determine if area has been set.
-            Type rvType = routeValues.GetType();
-            bool hasArea = (rvType.GetProperty("area") == null) ? false : true;
-
-            if (hasArea)
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)rvType.GetProperty("area").GetValue(routeValues, null)))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
-            }
-            else
-            {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
-            }
+            return AuthorizedActionLink(
+                htmlHelper: htmlHelper,
+                linkText: linkText,
+                actionName: actionName,
+                controllerName: controllerName,
+                protocol: protocol,
+                hostName: hostName,
+                fragment: fragment,
+                routeValues: new RouteValueDictionary(routeValues),
+                htmlAttributes: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes)
+                );
         }
 
         /// <summary>
@@ -443,30 +377,16 @@ namespace AuthorizedActionLink
         /// <returns>Link or empty string.</returns>
         public static MvcHtmlString AuthorizedActionLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
         {
-            // Determine if area has been set.
-            bool hasArea = (routeValues.ContainsKey("area")) ? true : false;
-
-            if (hasArea)
+            // See if user has access to the action.
+            if (ActionIsAccessibleToUser(htmlHelper: htmlHelper, actionName: actionName, controllerName: controllerName, routeValues: routeValues))
             {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName, (string)routeValues["area"]))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
+                // User has access. Generate ActionLink.
+                return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
             }
             else
             {
-                if (ActionIsAccessibleToUser(htmlHelper, actionName, controllerName))
-                {
-                    return LinkExtensions.ActionLink(htmlHelper, linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
-                }
-                else
-                {
-                    return MvcHtmlString.Empty;
-                }
+                // User does not have access. Return empty string.
+                return MvcHtmlString.Empty;
             }
         }
 
