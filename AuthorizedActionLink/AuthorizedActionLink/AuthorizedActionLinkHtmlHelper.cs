@@ -479,7 +479,12 @@ namespace AuthorizedActionLink
         /// <returns>True/false if action is accessible to current user.</returns>
         public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName)
         {
-            return AuthorizedActionLinkHtmlHelper.ActionIsAccessibleToUser(htmlHelper, actionName, String.Empty);
+            return ActionIsAccessibleToUser(
+                htmlHelper: htmlHelper,
+                actionName: actionName,
+                controllerName: null,
+                routeValues: null
+                );
         }
 
         /// <summary>
@@ -488,95 +493,104 @@ namespace AuthorizedActionLink
         /// <param name="htmlHelper">HtmlHelper object.</param>
         /// <param name="actionName">Action name to test.</param>
         /// <param name="controllerName">Controller name to test.</param>
-        /// <param name="areaName">Area name to test.</param>
-        /// <param name="routeValues">Route data to test.</param>
+        /// <param name="routeValues">Route values to test.</param>
         /// <returns>True/false if action is accessible to current user.</returns>
-        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName, object routeValues = null)
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, object routeValues)
         {
-            // Ensure area name is specified.
-            if (areaName == null)
+            return ActionIsAccessibleToUser(
+                htmlHelper: htmlHelper,
+                actionName: actionName,
+                controllerName: controllerName,
+                routeValues: new RouteValueDictionary(routeValues)
+                );
+        }
+
+        /// <summary>
+        /// Determines if specified action is accessible to current user.
+        /// </summary>
+        /// <param name="htmlHelper">HtmlHelper object.</param>
+        /// <param name="actionName">Action name to test.</param>
+        /// <param name="controllerName">Controller name to test.</param>
+        /// <param name="routeValues">Route values to test.</param>
+        /// <returns>True/false if action is accessible to current user.</returns>
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, RouteValueDictionary routeValues)
+        {
+            // Define variables.
+            ControllerBase controllerBase;
+            string areaName = String.Empty;
+            string[] namespaceNames = new string[] { };
+            bool hasArea = false, hasNamespaces = false;
+
+            // Throw error if both actionName is empty.
+            if (String.IsNullOrWhiteSpace(actionName))
             {
-                throw new ArgumentException("Argument areaName cannot be null. If root area is desired, specify parameter as an empty string.");
+                throw new ArgumentException("actionName must be specified.", "actionName");
             }
 
-            // Ensure controller name is specified.
-            if (string.IsNullOrWhiteSpace(controllerName))
-            {
-                throw new ArgumentException("Argument controllerName must be specified.");
-            }
-
-            // Get request context to use in searching for controller.
-            var testRequestContext = new RequestContext(htmlHelper.ViewContext.RequestContext.HttpContext, new RouteData());
-            testRequestContext.RouteData.DataTokens["Area"] = areaName;
-            testRequestContext.RouteData.DataTokens["Controller"] = controllerName;
-
-            // Configure namespace for route data if applicable.
+            // Pull out area and namespace names if they exist.
             if (routeValues != null)
             {
-                // Determine if area has been set.
-                Type rvType = routeValues.GetType();
-                bool hasNamespaces = (rvType.GetProperty("namespaces") == null) ? false : true;
-
-                if (hasNamespaces)
+                // See if an area is specified.
+                if (routeValues.ContainsKey("Area"))
                 {
-                    testRequestContext.RouteData.DataTokens["Namespaces"] = (string[])rvType.GetProperty("area").GetValue(routeValues, null);
+                    areaName = (string)routeValues["Area"];
+                    hasArea = true;
+                }
+
+                // See if a namespace has been specified.
+                if (routeValues.ContainsKey("Namespaces"))
+                {
+                    namespaceNames = (string[])routeValues["Namespaces"];
+                    hasNamespaces = true;
                 }
             }
-            
 
-            // Try to get controller.
-            IController controller;
-            try
-            {
-                controller = ControllerBuilder.Current.GetControllerFactory().CreateController(testRequestContext, controllerName);
-            }
-            catch (HttpException)
-            {
-                // Could not create controller. Rethrow as ArgumentException.
-                throw new ArgumentException("Specified controller " + controllerName + " in area " + areaName + " does not exist.");
-            }
-
-            // Ensure controller exists.
-            if (controller == null)
-            {
-                throw new ArgumentException("Specified controller " + controllerName + " in area " + areaName + " does not exist.");
-            }
-
-            // Get ControllerBase for this controller.
-            var controllerBase = (ControllerBase)controller;
-
-            return ActionIsAccessibleToUser(htmlHelper, actionName, controllerBase);
-        }
-
-        /// <summary>
-        /// Determines if specified action is accessible to current user.
-        /// </summary>
-        /// <param name="htmlHelper">HtmlHelper object.</param>
-        /// <param name="actionName">Action name to test.</param>
-        /// <param name="controllerName">Controller name to test.</param>
-        /// <returns>True/false if action is accessible to current user.</returns>
-        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName)
-        {
-            // Fetch controller.
-            ControllerBase controllerBase;
+            // Fetch controller. See if one was specified.            
             if (string.IsNullOrWhiteSpace(controllerName))
             {
-                // Assume current controller.
+                // No controller was specified. Assume current controller.
                 controllerBase = htmlHelper.ViewContext.Controller;
             }
             else
             {
-                // Perform lookup within current area.
+                // Search for specified controller.
 
-                // Get controller factor.
-                IControllerFactory controllerFactory = ControllerBuilder.Current.GetControllerFactory();
+                // See if area and/or namespaces were specified. If so, create a new context for searching. Otherwise, use existing.
+                RequestContext requestContext;
+                if (hasArea || hasNamespaces)
+                {
+                    // Construct new context.
+                    // Get request context to use in searching for controller.
+                    requestContext = new RequestContext(htmlHelper.ViewContext.RequestContext.HttpContext, new RouteData());
+                    requestContext.RouteData.DataTokens["Controller"] = controllerName;
+
+                    // Set area name if it has been specified.
+                    if (hasArea)
+                    {
+                        requestContext.RouteData.DataTokens["Area"] = areaName;
+                    }
+
+                    // Set namespaces if they have been specified.
+                    if (hasNamespaces)
+                    {
+                        requestContext.RouteData.DataTokens["Namespaces"] = namespaceNames;
+                    }
+                }
+                else
+                {
+                    // No area or namespaces specified. Use existing context.
+                    requestContext = htmlHelper.ViewContext.RequestContext;
+                }
+
+                // Get controller factory.
+                var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
 
                 // Attempt to get controller.
                 IController controller = null;
                 try
                 {
                     // Get controller.
-                    controller = controllerFactory.CreateController(htmlHelper.ViewContext.RequestContext, controllerName);
+                    controller = controllerFactory.CreateController(requestContext, controllerName);
                 }
                 catch (HttpException)
                 {
@@ -591,11 +605,46 @@ namespace AuthorizedActionLink
                     throw new ArgumentException("Specified controller " + controllerName + " does not exist.");
                 }
 
+                // Use controller.
                 controllerBase = (ControllerBase)controller;
             }
 
-            // Check on authorization.
             return ActionIsAccessibleToUser(htmlHelper, actionName, controllerBase);
+        }
+
+        /// <summary>
+        /// Determines if specified action is accessible to current user.
+        /// </summary>
+        /// <param name="htmlHelper">HtmlHelper object.</param>
+        /// <param name="actionName">Action name to test.</param>
+        /// <param name="controllerName">Controller name to test.</param>
+        /// <param name="areaName">Area name to test.</param>
+        /// <returns>True/false if action is accessible to current user.</returns>
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName, string areaName)
+        {
+            return ActionIsAccessibleToUser(
+                htmlHelper: htmlHelper,
+                actionName: actionName,
+                controllerName: controllerName,
+                routeValues: new { Area = areaName }
+                );
+        }
+
+        /// <summary>
+        /// Determines if specified action is accessible to current user.
+        /// </summary>
+        /// <param name="htmlHelper">HtmlHelper object.</param>
+        /// <param name="actionName">Action name to test.</param>
+        /// <param name="controllerName">Controller name to test.</param>
+        /// <returns>True/false if action is accessible to current user.</returns>
+        public static bool ActionIsAccessibleToUser(this HtmlHelper htmlHelper, string actionName, string controllerName)
+        {
+            return ActionIsAccessibleToUser(
+                htmlHelper: htmlHelper,
+                actionName: actionName,
+                controllerName: controllerName,
+                routeValues: null
+                );
         }
 
         /// <summary>
