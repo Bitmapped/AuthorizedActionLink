@@ -81,7 +81,7 @@
     <Content Include="AuthorizedActionLink-Licenses.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuGet\AuthorizedActionLink.2.1.2.0.nupkg" />
+    <None Include="NuGet\AuthorizedActionLink.2.2.0.0.nupkg" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
