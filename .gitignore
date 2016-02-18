@@ -3,3 +3,5 @@
 /AuthorizedActionLink/AuthorizedActionLink/bin
 
 AuthorizedActionLink/.vs/AuthorizedActionLink/v14/.suo
+/src/AuthorizedActionLink/bin/NuGet
+/src/AuthorizedActionLink/obj

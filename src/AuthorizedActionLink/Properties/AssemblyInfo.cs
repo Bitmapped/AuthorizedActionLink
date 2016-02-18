@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AuthorizedActionLink")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("HtmlHelper for creating ActionLinks if current user is authorized to view destination page.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Brian M. Powell")]
 [assembly: AssemblyProduct("AuthorizedActionLink")]
